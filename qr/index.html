@@ -1,0 +1,90 @@
+---
+layout: default
+permalink: /qr/
+title: Join the ringworld Discord
+description: Scan to join the ringworld Discord server.
+noindex: true
+---
+
+{%- comment -%}
+  Orphan page (2026-10-24): nothing links here; it exists to be put on a
+  screen or printed. Structure and wording follow the MLn /mln/qr/ page.
+  QR image is generated (python qrcode, ECC M) from the invite below — if the
+  invite changes, regenerate assets/img/discord_qr.png too.
+{%- endcomment -%}
+
+<section class="rw-shell rwq">
+  <img class="rwq-buddy" src="{{ '/assets/img/sprites/ufo-alien.png' | relative_url }}" alt="" aria-hidden="true" />
+  <h1 class="rwq-title">Join the ringworld Discord</h1>
+
+  <a class="rwq-img" href="https://discord.gg/7cVJU8E8Wr" target="_blank" rel="noopener">
+    <img src="{{ '/assets/img/discord_qr.png' | relative_url }}" alt="QR code to join the ringworld Discord server" width="320" height="320" />
+  </a>
+
+  <a class="rwq-btn" href="https://discord.gg/7cVJU8E8Wr" target="_blank" rel="noopener">Open Discord invite ↗</a>
+  <p class="rwq-url">discord.gg/7cVJU8E8Wr</p>
+</section>
+
+<style>
+  .rwq {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  .rwq-buddy {
+    width: 5.5rem;
+    animation: rwq-bob 3.2s ease-in-out infinite;
+  }
+  .rwq-title {
+    font: 700 clamp(1.6rem, 5vw, 2.2rem) / 1.2 var(--rw-display);
+    color: var(--rw-ink);
+    margin: 0.6rem 0 1.5rem;
+  }
+  .rwq-img {
+    display: inline-block;
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid var(--rw-card-line);
+    border-radius: 20px;
+    box-shadow: 0 6px 24px rgba(36, 48, 63, 0.1);
+    transition: transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  .rwq-img:hover {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+  .rwq-img img {
+    display: block;
+    width: 320px;
+    height: 320px;
+    max-width: 70vw;
+    max-height: 70vw;
+  }
+  .rwq-btn {
+    display: inline-block;
+    margin: 1.75rem 0 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    background: #5865f2;
+    color: #fff;
+    font: 700 1rem/1 var(--rw-display);
+    text-decoration: none;
+    box-shadow: 0 3px 0 #3c45a5;
+  }
+  .rwq-btn:hover {
+    color: #fff;
+    text-decoration: none;
+    background: #4752c4;
+  }
+  .rwq-url {
+    margin: 0;
+    font-family: var(--global-code-font-family, monospace);
+    color: var(--rw-ink-soft);
+  }
+  @keyframes rwq-bob {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-7px) rotate(4deg); }
+  }
+</style>
