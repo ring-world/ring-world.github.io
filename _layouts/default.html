@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="{{ site.lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ page.title | default: site.title }}</title>
+    {%- if page.description %}<meta name="description" content="{{ page.description }}" />{% endif %}
+    <meta property="og:title" content="{{ page.title | default: site.title }}" />
+    {%- if page.description %}<meta property="og:description" content="{{ page.description }}" />{% endif %}
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ page.url | absolute_url }}" />
+    <meta property="og:image" content="{{ '/assets/img/og.png' | absolute_url }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="{{ '/assets/img/icon.png' | relative_url }}" />
+    <link rel="canonical" href="{{ page.url | absolute_url }}" />
+    {%- if page.noindex %}<meta name="robots" content="noindex" />{% endif %}
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body { margin: 0; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+      img { max-width: 100%; }
+      a { color: var(--rw-ring); }
+      h1, h2, h3, p, ul, dl { margin-top: 0; }
+      button, input { font: inherit; }
+    </style>
+    {% include ringworld_styles.liquid %}
+  </head>
+
+  <body class="rw-site">
+    <header class="rw-masthead">
+      <div class="rw-shell rw-masthead-inner">
+        <a class="rw-brand" href="{{ '/' | relative_url }}" aria-label="ringworld — home">
+          <img class="rw-brand-ring" src="{{ '/assets/img/mark.png' | relative_url }}" alt="" width="480" height="263" />
+          <span class="rw-brand-mark" aria-hidden="true"></span>
+        </a>
+        <nav class="rw-topnav">
+          <a class="rw-sibling" href="https://chrisshi.com/mln/" aria-label="MLn Reading Club — the sibling reading group, archived">
+            <span class="rw-sibling-ico" aria-hidden="true"></span>
+            <span class="rw-sibling-mark" aria-hidden="true"></span>
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="rw-main" role="main">
+      {{ content }}
+    </main>
+
+    <footer class="rw-foot">
+      <div class="rw-shell rw-foot-inner">
+        <span class="rw-foot-name">ringworld</span>
+        <span class="rw-foot-dot">·</span>
+        <span>Pittsburgh · Sundays 2–5pm</span>
+        <span class="rw-foot-dot">·</span>
+        <span>a <a href="{{ site.data.ringworld.socratica_url }}" target="_blank" rel="noopener">Socratica node ↗</a></span>
+        <a class="rw-foot-by" href="https://chrisshi.com/">by Chris Shi</a>
+      </div>
+    </footer>
+  </body>
+</html>

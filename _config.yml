@@ -1,0 +1,5 @@
+title: ringworld
+url: https://ring-world.github.io
+baseurl: ""
+lang: en
+exclude: [README.md, CLAUDE.md, docs]
