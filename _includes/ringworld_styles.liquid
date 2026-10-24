@@ -330,6 +330,32 @@ html:has(body.rw-site) {
   background: var(--rw-card);
   opacity: 0.9;
 }
+/* the one link off the landing: the session timer at /timer/ */
+.rw-metarow a.rw-timer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 28px;
+  padding: 0.2rem 0.85rem 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: var(--rw-ring);
+  color: #fff;
+  font-family: var(--rw-display);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 2px 0 #2c5793;
+  transition: transform 0.15s cubic-bezier(0.3, 1.6, 0.5, 1), box-shadow 0.15s;
+}
+.rw-metarow a.rw-timer-btn span { color: inherit; }
+.rw-timer-btn img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  transition: transform 0.3s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.rw-metarow a.rw-timer-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 0 #2c5793; text-decoration: none; color: #fff; }
+.rw-timer-btn:hover img { transform: rotate(-15deg) scale(1.2); }
+.rw-metarow a.rw-timer-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #2c5793; }
 .rw-metarow a {
   color: var(--rw-ring);
   text-decoration: none;
