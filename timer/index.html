@@ -8,10 +8,10 @@ noindex: true
 
 
 {%- comment -%} Session timer, built for Chris's own work sessions (2026-10-24). Not linked from the landing page (static-landing mode). Two screens:
-setup (preset buttons, a custom time, the session log) and the display — a full-screen ring with NO visible controls, by request; it is meant to be
-put up on a screen. On the display: click = pause/resume, double-click or Esc = end (logs the time worked), space = pause/resume. Timing is wall-clock
-(Date.now) so a backgrounded tab stays exact; state + log live in localStorage under rwTimer.* — per-browser only. Labels reuse the landing page's
-schedule words (focus time / social break); no other copy. {%- endcomment -%} {%- assign sp = '/assets/img/sprites/' | relative_url -%}
+setup (quick presets, with custom time tucked away) and the display — a full-screen ring with NO visible controls, by request; it is meant to be put up
+on a screen. On the display: click = pause/resume, double-click or Esc = end, space = pause/resume. Timing is wall-clock (Date.now) so a backgrounded
+tab stays exact. Timer state is intentionally memory-only: there is no session history or browser storage. Labels reuse the landing page's schedule
+words (focus time / social break); no other copy. {%- endcomment -%} {%- assign sp = '/assets/img/sprites/' | relative_url -%}
 
 <style>
   /* ── setup ── */
@@ -82,13 +82,44 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
     border-color: var(--rw-lavender);
   }
 
+  .rwt-custom-wrap {
+    margin-top: 1.1rem;
+    text-align: center;
+  }
+  .rwt-custom-wrap summary {
+    display: inline-block;
+    color: var(--rw-ink-soft);
+    font: 600 0.78rem/1 var(--rw-display);
+    cursor: pointer;
+    list-style: none;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    transition: color 0.2s, background 0.2s;
+  }
+  .rwt-custom-wrap summary::-webkit-details-marker {
+    display: none;
+  }
+  .rwt-custom-wrap summary::before {
+    content: "+ ";
+  }
+  .rwt-custom-wrap[open] summary::before {
+    content: "− ";
+  }
+  .rwt-custom-wrap summary:hover,
+  .rwt-custom-wrap summary:focus-visible {
+    color: var(--rw-ink);
+    background: rgba(62, 111, 180, 0.07);
+    outline: none;
+  }
+  .rwt-custom-panel {
+    margin-top: 0.75rem;
+  }
   .rwt-custom {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.6rem;
-    margin-top: 1.2rem;
   }
   .rwt-custom input,
   .rwt-label {
@@ -117,7 +148,7 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
   .rwt-label {
     width: 100%;
     max-width: 22rem;
-    margin-top: 1.4rem;
+    margin-top: 0.7rem;
     text-align: center;
   }
   .rwt-go {
@@ -136,106 +167,6 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
   .rwt-go:active {
     transform: translateY(3px);
     box-shadow: 0 1px 0 #2c5793;
-  }
-
-  /* ── log ── */
-  .rwt-log {
-    width: 100%;
-    max-width: 30rem;
-    margin-top: 2.4rem;
-    border-top: 1px solid var(--rw-line);
-    padding-top: 1.2rem;
-  }
-  .rwt-log-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .rwt-log-head h2 {
-    font: 700 1.05rem/1 var(--rw-display);
-    color: var(--rw-ink);
-    margin: 0;
-  }
-  .rwt-total {
-    font: 700 0.95rem/1 var(--rw-display);
-    color: var(--rw-ring);
-  }
-  .rwt-list {
-    list-style: none;
-    padding: 0;
-    margin: 0.8rem 0 0;
-  }
-  .rwt-list li {
-    display: grid;
-    grid-template-columns: 1.6rem 1fr auto auto auto;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.5rem 0.7rem;
-    margin-bottom: 0.4rem;
-    background: var(--rw-card);
-    border: 1px solid var(--rw-card-line);
-    border-radius: 12px;
-    font-size: 0.92rem;
-  }
-  .rwt-list li.is-new {
-    animation: rwt-slide 0.6s cubic-bezier(0.3, 1.4, 0.5, 1);
-  }
-  .rwt-list img {
-    width: 1.6rem;
-    height: 1.6rem;
-    object-fit: contain;
-  }
-  .rwt-list .lname {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .rwt-list .lname.empty {
-    color: var(--rw-ink-soft);
-    font-style: italic;
-  }
-  .rwt-list .ldur {
-    font: 700 0.9rem/1 var(--rw-display);
-    font-variant-numeric: tabular-nums;
-  }
-  .rwt-list .lwhen {
-    font-size: 0.8rem;
-    color: var(--rw-ink-soft);
-    font-variant-numeric: tabular-nums;
-  }
-  .rwt-list .ldel {
-    border: 0;
-    background: none;
-    color: var(--rw-ink-soft);
-    cursor: pointer;
-    padding: 0 0.1rem;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .rwt-list li:hover .ldel,
-  .rwt-list .ldel:focus {
-    opacity: 0.8;
-  }
-  .rwt-log-days {
-    display: flex;
-    gap: 0.35rem;
-    margin-top: 0.9rem;
-    flex-wrap: wrap;
-  }
-  .rwt-day {
-    font: 600 0.75rem/1 var(--rw-display);
-    color: var(--rw-ink-soft);
-    background: none;
-    border: 1px solid var(--rw-line);
-    border-radius: 999px;
-    padding: 0.35rem 0.6rem;
-    cursor: pointer;
-  }
-  .rwt-day.is-on {
-    color: var(--rw-ink);
-    border-color: var(--rw-ring);
-    background: rgba(62, 111, 180, 0.08);
   }
 
   /* ── the display: full screen, no controls ── */
@@ -539,16 +470,6 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
       transform: scale(1.03);
     }
   }
-  @keyframes rwt-slide {
-    from {
-      opacity: 0;
-      transform: translateY(-10px) scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
   @keyframes rwt-shake {
     25% {
       transform: translateX(-5px);
@@ -586,21 +507,16 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
     </button>
   </div>
 
-  <form class="rwt-custom" autocomplete="off">
-    <input class="rwt-custom-in" type="text" inputmode="numeric" placeholder="1:30:00" aria-label="Custom time (minutes, or h:mm:ss)" />
-    <button type="submit" class="rwt-go">start</button>
-  </form>
-
-  <input class="rwt-label" type="text" maxlength="60" placeholder="label" aria-label="Session label" />
-
-  <section class="rwt-log" aria-label="Session log">
-    <div class="rwt-log-head">
-      <h2 class="rwt-log-title">today</h2>
-      <span class="rwt-total"></span>
+  <details class="rwt-custom-wrap">
+    <summary>custom timer</summary>
+    <div class="rwt-custom-panel">
+      <form class="rwt-custom" autocomplete="off">
+        <input class="rwt-custom-in" type="text" inputmode="numeric" placeholder="1:30:00" aria-label="Custom time (minutes, or h:mm:ss)" />
+        <button type="submit" class="rwt-go">start</button>
+      </form>
+      <input class="rwt-label" type="text" maxlength="60" placeholder="label (optional)" aria-label="Session label" />
     </div>
-    <ol class="rwt-list"></ol>
-    <div class="rwt-log-days"></div>
-  </section>
+  </details>
 </div>
 
 <div class="rwt-display" aria-live="off">
@@ -652,38 +568,23 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
       sEl = q(".rwt-sec"),
       dlabel = q(".rwt-dlabel"),
       label = q(".rwt-label"),
+      customWrap = q(".rwt-custom-wrap"),
       customForm = q(".rwt-custom"),
       customIn = q(".rwt-custom-in"),
-      list = q(".rwt-list"),
-      total = q(".rwt-total"),
-      daysEl = q(".rwt-log-days"),
-      logTitle = q(".rwt-log-title"),
       confetti = q(".rwt-confetti");
 
-    var KEY = "rwTimer.run",
-      LOGKEY = "rwTimer.log";
     var ICON = { focus: "star-big", break: "cloud-mint", stopwatch: "astronaut" };
     var NAME = { focus: "focus time", break: "social break", stopwatch: "stopwatch" };
 
-    function load(k, d) {
-      try {
-        var v = JSON.parse(localStorage.getItem(k));
-        return v == null ? d : v;
-      } catch (e) {
-        return d;
-      }
-    }
-    function save(k, v) {
-      try {
-        localStorage.setItem(k, JSON.stringify(v));
-      } catch (e) {}
-    }
+    // Remove data left by the former persistent timer and session log.
+    try {
+      localStorage.removeItem("rwTimer.run");
+      localStorage.removeItem("rwTimer.log");
+    } catch (e) {}
 
     // st: null when on the setup screen; otherwise
     // { kind, dur (ms; 0 = stopwatch), acc (ms before this run), startAt, label, done }
-    var st = load(KEY, null);
-    var log = load(LOGKEY, []);
-    var viewDay = dayKey(Date.now());
+    var st = null;
 
     function now() {
       return Date.now();
@@ -706,11 +607,6 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
       if (t.m) return t.m + "m" + (t.s ? " " + pad(t.s) + "s" : "");
       return t.s + "s";
     }
-    function dayKey(ts) {
-      var d = new Date(ts);
-      return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
-    }
-
     function setDigits(el, str) {
       if (el.textContent === str) return;
       var old = el.textContent;
@@ -765,9 +661,9 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
 
       if (timer && running() && e >= st.dur) complete();
     }
-    function begin(kind, ms) {
-      st = { kind: kind, dur: ms, acc: 0, startAt: now(), label: label.value.trim(), done: false };
-      save(KEY, st);
+    function begin(kind, ms, sessionLabel) {
+      st = { kind: kind, dur: ms, acc: 0, startAt: now(), label: sessionLabel || "", done: false };
+      customWrap.open = false;
       lastBuddy = "";
       dlabel.textContent = st.label || NAME[kind];
       body.classList.add("rwt-on");
@@ -795,18 +691,12 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
       } else {
         st.startAt = now();
       }
-      save(KEY, st);
       popBuddy();
     }
-    // leave the display; time worked so far goes in the log
+    // leave the display and return to the quick-select screen
     function end() {
       if (!st) return;
-      if (!st.done) {
-        var e = st.dur ? Math.min(elapsed(), st.dur) : elapsed();
-        if (e >= 60000) addLog(e);
-      }
       st = null;
-      save(KEY, null);
       body.classList.remove("rwt-on");
       document.title = "timer";
       if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
@@ -815,8 +705,6 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
       st.acc = st.dur;
       st.startAt = null;
       st.done = true;
-      save(KEY, st);
-      addLog(st.dur);
       celebrate();
       chime();
       if (window.Notification && Notification.permission === "granted" && document.hidden) {
@@ -861,7 +749,7 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
     // ── setup ──
     document.querySelectorAll(".rwt-preset").forEach(function (b) {
       b.addEventListener("click", function () {
-        begin(b.dataset.kind, +b.dataset.min * 60000);
+        begin(b.dataset.kind, +b.dataset.min * 60000, "");
       });
     });
     // "45" = minutes, "12:30" = mm:ss, "1:30:00" = h:mm:ss
@@ -891,85 +779,8 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
         return;
       }
       customIn.classList.remove("bad");
-      begin("focus", ms);
+      begin("focus", ms, label.value.trim());
     });
-
-    // ── log ──
-    function addLog(ms) {
-      log.push({ at: now(), ms: ms, label: st.label, kind: st.kind });
-      if (log.length > 2000) log = log.slice(-2000);
-      save(LOGKEY, log);
-      viewDay = dayKey(now());
-      renderLog(true);
-    }
-    function renderLog(fresh) {
-      var today = dayKey(now());
-      var items = log
-        .map(function (r, i) {
-          return { r: r, i: i };
-        })
-        .filter(function (x) {
-          return dayKey(x.r.at) === viewDay;
-        });
-      list.innerHTML = "";
-      var sum = 0;
-      items.reverse().forEach(function (x, k) {
-        var r = x.r;
-        if (r.kind !== "break") sum += r.ms;
-        var li = document.createElement("li");
-        if (fresh && k === 0) li.className = "is-new";
-        var img = document.createElement("img");
-        img.src = SP + (ICON[r.kind] || "star-big") + ".png";
-        img.alt = "";
-        var nm = document.createElement("span");
-        nm.className = "lname" + (r.label ? "" : " empty");
-        nm.textContent = r.label || NAME[r.kind] || "";
-        var du = document.createElement("span");
-        du.className = "ldur";
-        du.textContent = fmtShort(r.ms);
-        var wh = document.createElement("span");
-        wh.className = "lwhen";
-        var d = new Date(r.at);
-        wh.textContent = d.getHours() + ":" + pad(d.getMinutes());
-        var del = document.createElement("button");
-        del.className = "ldel";
-        del.type = "button";
-        del.textContent = "×";
-        del.setAttribute("aria-label", "Delete entry");
-        del.addEventListener("click", function () {
-          log.splice(x.i, 1);
-          save(LOGKEY, log);
-          renderLog(false);
-        });
-        li.append(img, nm, du, wh, del);
-        list.appendChild(li);
-      });
-      total.textContent = sum ? fmtShort(sum) : "";
-      logTitle.textContent =
-        viewDay === today
-          ? "today"
-          : new Date(viewDay + "T12:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-
-      var days = [];
-      for (var i = log.length - 1; i >= 0 && days.length < 7; i--) {
-        var k2 = dayKey(log[i].at);
-        if (days.indexOf(k2) < 0) days.push(k2);
-      }
-      if (days.indexOf(today) < 0) days.unshift(today);
-      daysEl.innerHTML = "";
-      if (days.length > 1)
-        days.forEach(function (k3) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.className = "rwt-day" + (k3 === viewDay ? " is-on" : "");
-          b.textContent = k3 === today ? "today" : new Date(k3 + "T12:00").toLocaleDateString(undefined, { weekday: "short", day: "numeric" });
-          b.addEventListener("click", function () {
-            viewDay = k3;
-            renderLog(false);
-          });
-          daysEl.appendChild(b);
-        });
-    }
 
     // ── celebration ──
     var CONF = ["star-big", "star-folded", "stars-twin", "blob-peach", "blob-lilac", "blob-green", "saturn-peach", "comet", "frog", "moon"];
@@ -1049,13 +860,6 @@ schedule words (focus time / social break); no other copy. {%- endcomment -%} {%
         });
     }
 
-    // a session still going from before a reload comes straight back up
-    if (st) {
-      label.value = st.label || "";
-      dlabel.textContent = st.label || NAME[st.kind];
-      body.classList.add("rwt-on");
-    }
-    renderLog(false);
     // an interval, not requestAnimationFrame: rAF stops in a background tab,
     // and the timer still has to finish (and chime) there
     setInterval(render, 200);
